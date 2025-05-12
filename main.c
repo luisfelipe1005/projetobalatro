@@ -10,7 +10,7 @@ int main()
     printf("sua mão é:\n");
 
 for(i=0;i<=5;i++){
-    baralho[x]
+    printf("%c",baralho[x]);
 }
 
 

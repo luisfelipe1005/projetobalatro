@@ -1,16 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+void shuffle(char **array, size_t n);
 int main()
 {
-    char baralho[]={ 'AO', 'AE', 'AC', 'AP', '2O', '2E', '2C', '2P','3O', '3E', '3C', '3P','4O', '4E', '4C', '4P','5O', '5E', '5C', '5P','6O', '6E', '6C', '6P','7O', '7E', '7C', '7P','8O', '8E', '8C', '8P','9O', '9E', '9C', '9P','VO', 'VE', 'VC', 'VP','DO', 'DE', 'DC', 'DP','RO', 'RE', 'RC', 'RP',} ;
+  char *baralho[] = {
+    "As de ouros", "As de espadas", "As de paus", "As de copas",
+    "2 de ouros", "2 de espadas", "2 de copas", "2 de paus",
+    "3 de ouros", "3 de espadas", "3 de copas", "3 de paus",
+    "4 de ouros", "4 de espadas", "4 de copas", "4 de paus",
+    "5 de ouros", "5 de espadas", "5 de copas", "5 de paus",
+    "6 de ouros", "6 de espadas", "6 de copas", "6 de paus",
+    "7 de ouros", "7 de espadas", "7 de copas", "7 de paus",
+    "8 de ouros", "8 de espadas", "8 de copas", "8 de paus",
+    "9 de ouros", "9 de espadas", "9 de copas", "9 de paus",
+    "Valete de ouros", "Valete de espadas", "Valete de copas", "Valete de paus",
+    "Dama de ouros", "Dama de espadas", "Dama de copas", "Dama de paus",
+    "Rei de ouros", "Rei de espadas", "Rei de copas", "Rei de paus"
+};
+
 
     int size = sizeof(baralho) / sizeof(baralho[0]);
-    shuffle(baralho,size);
+    shuffle(baralho, size);
     printf("sua mão é:\n");
 
-for(i=0;i<=5;i++){
-    printf("%c",baralho[x]);
+for(int i=0;i<=7;i++){
+    printf("%s\n",baralho[i]);
 }
 
 
@@ -18,7 +32,7 @@ for(i=0;i<=5;i++){
 }
 
 
-void shuffle(char *array, size_t n)
+void shuffle(char **array, size_t n)
 {
     if (n > 1)
     {
@@ -26,7 +40,7 @@ void shuffle(char *array, size_t n)
         for (i = 0; i < n - 1; i++)
         {
           size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
-          int t = array[j];
+          char *t =  array[j];
           array[j] = array[i];
           array[i] = t;
         }

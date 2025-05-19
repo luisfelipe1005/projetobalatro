@@ -9,7 +9,7 @@ int main()
 {
 
   char *baralho[] = {
- "AO", "AE", "AC", "AP", "2O", "2E", "2C", "2P","3O", "3E", "3C", "3P","4O", "4E", "4C", "4P","5O", "5E", "5C", "5P","6O", "6E", "6C", "6P","7O", "7E", "7C", "7P","8O", "8E", "8C", "8P","9O", "9E", "9C", "9P","VO", "VE", "VC", "VP","DO", "DE", "DC", "DP","RO", "RE", "RC", "RP"
+ "AO", "AE", "AC", "AP", "2O", "2E", "2C", "2P","3O", "3E", "3C", "3P","4O", "4E", "4C", "4P","5O", "5E", "5C", "5P","6O", "6E", "6C", "6P","7O", "7E", "7C", "7P","8O", "8E", "8C", "8P","9O", "9E", "9C", "9P","0O", "0E", "0C", "0P","VO", "VE", "VC", "VP","DO", "DE", "DC", "DP","RO", "RE", "RC", "RP"
 };
   char *mao[7];
 
@@ -30,6 +30,7 @@ for(int i=0;i<5;i++){
    if(isflush(mao, 5)==true){
     printf("e um flush");
    };
+   printf("Seu maior par é: %d", ismultiple(mao, 5));
 
 
 
@@ -55,10 +56,10 @@ void shuffle(char **array, size_t n)
 
 bool isflush(char **array, size_t n){
     int i;
-for(i=1; i<n-1;i++){
+for(i=1; i<n;i++){
             printf("%s %s\n", array[i-1], array[i]);
     if(array[i-1][1] != array[i][1]){
-        printf("nao é shuffle");
+        printf("nao é flush");
         return false;
     }
 }
@@ -69,23 +70,27 @@ for(i=1; i<n-1;i++){
 
 int ismultiple(char **array, size_t n){
     
-    int i, repet[5]={1,1,1,1,1}; 
+    int i, repet[5]={0,0,0,0,0}; 
     char repetc[5];
 
-for(i=1; i<n-1;i++){
-    if(array[i-1][0] == repetc[i]){
+for(i=0; i<n;i++){
+    if(array[i][0] == repetc[i]){
        repet[i]++;
         }    
     else{
-        repetc[i-1]=array[i-1][0];
+        repetc[i]=array[i][0];
        }
 }
 
-bool par,trinca;
-for(int a=0; a<n-1;a++){
+bool par,trinca,dpares;
+for(int a=0; a<n;a++){
     if(repetc[a]==2){
+      if(par==true){
+        dpares=true;
+      }
+      else{
 par=true;
-    
+      }
     }
     else if(repetc[a]==3){
 trinca=true;
@@ -95,17 +100,26 @@ trinca=true;
 }
 
 int maior=1;
-for(int b=0; b<n-1;b++){
+for(int b=0; b<n;b++){
     if(maior<repetc[b]){
-maior=repetc[b]
+maior=repetc[b];
     
     }
     
 }
 
+if(!(maior>=4) && (par == true && trinca == true)){
+  return 7;
+}
+else if(!(maior>=2) && (dpares == true)){
+  return 6;
+}
+
+else{
+  return maior;
+}
 
 
 
-    return true;
 
 }

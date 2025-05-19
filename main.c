@@ -4,6 +4,7 @@
 #include <time.h>
 void shuffle(char **array, size_t n);
 bool isflush(char **array, size_t n);
+int ismultiple(char **array, size_t n);
 int main()
 {
 
@@ -66,4 +67,45 @@ for(i=1; i<n-1;i++){
 
 }
 
+int ismultiple(char **array, size_t n){
+    
+    int i, repet[5]={1,1,1,1,1}; 
+    char repetc[5];
 
+for(i=1; i<n-1;i++){
+    if(array[i-1][0] == repetc[i]){
+       repet[i]++;
+        }    
+    else{
+        repetc[i-1]=array[i-1][0];
+       }
+}
+
+bool par,trinca;
+for(int a=0; a<n-1;a++){
+    if(repetc[a]==2){
+par=true;
+    
+    }
+    else if(repetc[a]==3){
+trinca=true;
+    
+    }
+    
+}
+
+int maior=1;
+for(int b=0; b<n-1;b++){
+    if(maior<repetc[b]){
+maior=repetc[b]
+    
+    }
+    
+}
+
+
+
+
+    return true;
+
+}

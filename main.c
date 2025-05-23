@@ -57,9 +57,8 @@ void shuffle(char **array, size_t n)
 bool isflush(char **array, size_t n){
     int i;
 for(i=1; i<n;i++){
-            printf("%s %s\n", array[i-1], array[i]);
     if(array[i-1][1] != array[i][1]){
-        printf("nao é flush");
+        printf("nao é flush\n");
         return false;
     }
 }
@@ -68,58 +67,60 @@ for(i=1; i<n;i++){
 
 }
 
-int ismultiple(char **array, size_t n){
-    
-    int i, repet[5]={0,0,0,0,0}; 
-    char repetc[5];
+int ismultiple(char **array, size_t n) {
 
-for(i=0; i<n;i++){
-    if(array[i][0] == repetc[i]){
-       repet[i]++;
-        }    
-    else{
-        repetc[i]=array[i][0];
-       }
+char charr[5] = {0},ra;
+
+int count[5] = {0},ir, nmrd = 0;
+
+bool encontrado,par=false,dpares=false,trinca=false,fullhouse=false;
+
+
+
+for (int i = 0; i < n; i++) {
+ra = array[i][0];
+encontrado = false;
+ir = -1;
+
+for (int j = 0; j < nmrd; j++) {
+ if (charr[j] == ra) {
+encontrado = true;
+ir = j;
+break;
+}
 }
 
-bool par,trinca,dpares;
-for(int a=0; a<n;a++){
-    if(repetc[a]==2){
-      if(par==true){
-        dpares=true;
-      }
-      else{
-par=true;
-      }
-    }
-    else if(repetc[a]==3){
-trinca=true;
-    
-    }
-    
+if (encontrado) {
+count[ir]++;
+} else {
+if (nmrd < 5) {
+charr[nmrd] = ra;
+count[nmrd] = 1;
+nmrd++;
 }
+}
+
+}
+
 
 int maior=1;
-for(int b=0; b<n;b++){
-    if(maior<repetc[b]){
-maior=repetc[b];
-    
+
+for (int k = 0; k < nmrd; k++) {
+    if (count[k] > maior) {
+        maior = count[k];
     }
-    
+    if (count[k] == 2 && par==false) {
+        par=true;
+    else if (count[k] == 2 && par==true) {
+        dpares=true;
+    } else if (count[k] == 3) {
+        trinca=true;
+    }
+    if(trinca==true&&par==true){
+        fullhouse=true;
+    }
 }
 
-if(!(maior>=4) && (par == true && trinca == true)){
-  return 7;
 }
-else if(!(maior>=2) && (dpares == true)){
-  return 6;
-}
-
-else{
-  return maior;
-}
-
-
-
-
+return maior;
 }

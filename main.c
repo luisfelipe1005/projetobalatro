@@ -105,22 +105,33 @@ nmrd++;
 
 int maior=1;
 
-for (int k = 0; k < nmrd; k++) {
-    if (count[k] > maior) {
+for(int k = 0; k < nmrd; k++) {
+    if(count[k] > maior) {
         maior = count[k];
     }
-    if (count[k] == 2 && par==false) {
+    if(count[k] == 2 && par==false) {
         par=true;
-    else if (count[k] == 2 && par==true) {
+    }
+    else if(count[k] == 2 && par==true) {
         dpares=true;
-    } else if (count[k] == 3) {
+    } 
+    else if (count[k] == 3) {
         trinca=true;
     }
     if(trinca==true&&par==true){
         fullhouse=true;
     }
-}
+
 
 }
+
+if(fullhouse && maior <4){
+return 7; //7 é o codigo para fullhouse
+}
+else if(dpares && maior <2){
+return 6; //6 é o codigo para dois pares
+}
+else{
 return maior;
+}
 }

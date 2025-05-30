@@ -5,6 +5,7 @@
 void shuffle(char **array, size_t n);
 bool isflush(char **array, size_t n);
 int ismultiple(char **array, size_t n);
+bool issequence(char **array, size_t n);
 int main()
 {
 
@@ -31,6 +32,8 @@ for(int i=0;i<5;i++){
     printf("e um flush");
    };
    printf("Seu maior par é: %d", ismultiple(mao, 5));
+   
+printf("sua mão é %d sequencia",issequence(mao, 5));
 
 
 
@@ -135,3 +138,24 @@ else{
 return maior;
 }
 }
+
+
+bool issequence(char **array, size_t n){
+    int mao[n];
+    for(int i=0;i<n;i++){
+    if(array[i][0]=='V')
+        mao[i]=11;
+    else if(array[i][0]=='D')
+        mao[i]=12;
+    else if(array[i][0]=='R')
+        mao[i]=13;
+    else{
+        mao[i]=ord(array[i][0] ) - ord('0')
+    }
+    
+    }
+    qsort
+    return true;
+}
+
+

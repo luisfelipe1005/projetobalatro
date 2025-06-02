@@ -7,7 +7,7 @@ bool isflush(char **array, size_t n);
 int ismultiple(char **array, size_t n);
 bool issequence(char **array, size_t n);
 int comparador(const void *a, const void *b);
-void numerar_baralho(char **array, size_t n);
+void numerar_baralho(char **array, size_t n,int* maonumerada);
 int main()
 {
 
@@ -17,6 +17,7 @@ int main()
   char *mao[7];
 
     int size = sizeof(baralho) / sizeof(baralho[0]);
+   
     printf("sua mão é:\n");
 
     srand(time(NULL));
@@ -29,40 +30,61 @@ for(int i=0;i<5;i++){
 }
 
 
-   bool flush=isflush(mao, 5);
+       bool flush=isflush(mao, 5);
    int multiplos=ismultiple(mao, 5);
-   bool sequencia=issequence(mao, 5);
+  bool sequencia=issequence(mao, 5);
+   int fichas,mult;
    printf("\n");
    
     if(flush && sequencia){
        printf("straight flush");
+       fichas = 100;
+       mult=8;
    }
-   else if(flush){
-       printf("Flush");
+    else if(multiplos==4){
+       printf("Quadra");
+       fichas = 60;
+       mult=7;
    }
     else if(multiplos==7){
        printf("Full house");
+       fichas = 40;
+       mult=4;
    }
     else if(flush){
        printf("Flush");
+       fichas = 35;
+       mult=4;
+       
    }else if(sequencia){
        printf("straight");
+       fichas = 30;
+       mult=4;
+       
    }
     else if(multiplos==3){
        printf("Trinca");
+       fichas = 30;
+       mult=3;
    }
     else if(multiplos==6){
        printf("Dois pares");
+       fichas = 20;
+       mult=2;
    }
     else if(multiplos==2){
        printf("par");
+       fichas = 10;
+       mult=2;
    }
    else{
        printf("carta alta");
+       fichas = 5;
+       mult=1;
    }
    
    
-   
+   printf("\n Sua pontuacao e: %d", fichas*mult);
 
 
     return 0;
@@ -158,7 +180,7 @@ for(int k = 0; k < nmrd; k++) {
 if(fullhouse && maior <4){
 return 7; //7 é o codigo para fullhouse
 }
-else if(dpares && maior <2){
+else if(dpares){
 return 6; //6 é o codigo para dois pares
 }
 else{
@@ -168,25 +190,11 @@ return maior;
 
 
 bool issequence(char **array, size_t n){
-    int mao[n];
+    int mao[5]; 
+    numerar_baralho(array, 5,mao);
     bool sequencia=true;
-    for(int i=0;i<n;i++){
-    if(array[i][0]=='0')
-       mao[i]=10;
-    else if(array[i][0]=='V')
-        mao[i]=11;
-    else if(array[i][0]=='D')
-        mao[i]=12;
-    else if(array[i][0]=='R')
-        mao[i]=13;
-    else if(array[i][0]=='A')
-        mao[i]=14;
     
-    else{
-        mao[i]=array[i][0]  - '0';
-    }
     
-    }
 qsort(mao, n, sizeof(int), comparador);
 
      	for(int k = 0; k < n-1; k++) {
@@ -208,3 +216,24 @@ int comparador(const void *a, const void *b) {
 }
 
 
+
+
+void numerar_baralho(char **array, size_t n, int* maonumerada){
+    
+    for(int i=0;i<n;i++){
+    if(array[i][0]=='0')
+       maonumerada[i]=10;
+    else if(array[i][0]=='V')
+        maonumerada[i]=11;
+    else if(array[i][0]=='D')
+        maonumerada[i]=12;
+    else if(array[i][0]=='R')
+        maonumerada[i]=13;
+    else if(array[i][0]=='A')
+        maonumerada[i]=14;
+    
+    else{
+        maonumerada[i]=array[i][0]  - '0';
+    }
+    }
+}

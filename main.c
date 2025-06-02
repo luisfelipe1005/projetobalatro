@@ -6,6 +6,8 @@ void shuffle(char **array, size_t n);
 bool isflush(char **array, size_t n);
 int ismultiple(char **array, size_t n);
 bool issequence(char **array, size_t n);
+int comparador(const void *a, const void *b);
+void numerar_baralho(char **array, size_t n);
 int main()
 {
 
@@ -13,7 +15,6 @@ int main()
  "AO", "AE", "AC", "AP", "2O", "2E", "2C", "2P","3O", "3E", "3C", "3P","4O", "4E", "4C", "4P","5O", "5E", "5C", "5P","6O", "6E", "6C", "6P","7O", "7E", "7C", "7P","8O", "8E", "8C", "8P","9O", "9E", "9C", "9P","0O", "0E", "0C", "0P","VO", "VE", "VC", "VP","DO", "DE", "DC", "DP","RO", "RE", "RC", "RP"
 };
   char *mao[7];
-
 
     int size = sizeof(baralho) / sizeof(baralho[0]);
     printf("sua mão é:\n");
@@ -24,17 +25,44 @@ int main()
 
 for(int i=0;i<5;i++){
   mao[i]=baralho[i];
-    printf("%s\n",mao[i]);
+    printf("%s ",mao[i]);
 }
 
 
-   if(isflush(mao, 5)==true){
-    printf("e um flush");
-   };
-   printf("Seu maior par é: %d", ismultiple(mao, 5));
+   bool flush=isflush(mao, 5);
+   int multiplos=ismultiple(mao, 5);
+   bool sequencia=issequence(mao, 5);
+   printf("\n");
    
-printf("sua mão é %d sequencia",issequence(mao, 5));
-
+    if(flush && sequencia){
+       printf("straight flush");
+   }
+   else if(flush){
+       printf("Flush");
+   }
+    else if(multiplos==7){
+       printf("Full house");
+   }
+    else if(flush){
+       printf("Flush");
+   }else if(sequencia){
+       printf("straight");
+   }
+    else if(multiplos==3){
+       printf("Trinca");
+   }
+    else if(multiplos==6){
+       printf("Dois pares");
+   }
+    else if(multiplos==2){
+       printf("par");
+   }
+   else{
+       printf("carta alta");
+   }
+   
+   
+   
 
 
     return 0;
@@ -61,7 +89,6 @@ bool isflush(char **array, size_t n){
     int i;
 for(i=1; i<n;i++){
     if(array[i-1][1] != array[i][1]){
-        printf("nao é flush\n");
         return false;
     }
 }
@@ -142,20 +169,42 @@ return maior;
 
 bool issequence(char **array, size_t n){
     int mao[n];
+    bool sequencia=true;
     for(int i=0;i<n;i++){
-    if(array[i][0]=='V')
+    if(array[i][0]=='0')
+       mao[i]=10;
+    else if(array[i][0]=='V')
         mao[i]=11;
     else if(array[i][0]=='D')
         mao[i]=12;
     else if(array[i][0]=='R')
         mao[i]=13;
+    else if(array[i][0]=='A')
+        mao[i]=14;
+    
     else{
-        mao[i]=ord(array[i][0] ) - ord('0')
+        mao[i]=array[i][0]  - '0';
     }
     
     }
-    qsort
-    return true;
+qsort(mao, n, sizeof(int), comparador);
+
+     	for(int k = 0; k < n-1; k++) {
+if(mao[k]+1!=mao[k+1]){
+    sequencia=false;
+    break;
+}
+
+}
+
+    return sequencia;
+}
+
+
+
+
+int comparador(const void *a, const void *b) {
+   return ( *(int*)a - *(int*)b );
 }
 
 

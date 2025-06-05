@@ -483,13 +483,16 @@
 
 1362338300 c:\allegro\allegromingw\include\allegro5\allegro_image.h
 
-1749052943 source:c:\users\ufsm\downloads\pong\main.c
+1749145620 source:c:\users\ufsm\downloads\pong\main.c
 	<stdio.h>
 	<allegro5/allegro.h>
 	<allegro5/allegro_image.h>
 	<allegro5/allegro_font.h>
 	<allegro5/allegro_ttf.h>
 	<allegro5/allegro_primitives.h>
+	<stdlib.h>
+	<stdbool.h>
+	<time.h>
 
 1372639132 c:\allegro\allegromingw\include\allegro5\allegro_font.h
 	"allegro5/allegro.h"

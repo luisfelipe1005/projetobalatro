@@ -208,16 +208,23 @@ void shuffle(char **array, size_t n);
 
     srand(time(NULL));
         shuffle(cartas,size);
-
-
+int nmrcartatopo=0;
+char *mao[7];
 char image_path[50];
+bool carta_click[7]={false};
+int cartamaos=1;
+
+char *selecionado[5]={'\0','\0','\0','\0','\0'};
+int possel=0;
+
 
 for (a = 0; a < 7; a++) {
-
-    sprintf(image_path, "imagens/%s.png", cartas[a]);
+mao[a]=cartas[nmrcartatopo];
+nmrcartatopo++;
+    sprintf(image_path, "imagens/%s.png", mao[a]);
         carta[a] = al_load_bitmap(image_path);
 if (!carta[a]) {
-    fprintf(stderr, "Failed to load image for carta %d e %s\n", a, cartas[a]);
+    fprintf(stderr, "Failed to load image for carta %d e %s\n", a, mao[a]);
     exit(-1);
 }
 
@@ -441,24 +448,35 @@ if (!carta[a]) {
                         printf("baralho tocado");
                     }
 
-bool carta_click[7];
-int cartamaos=0;
-                        for(a=0;a<7;a++){
-       if(ev.mouse.x >= carta_pos_x[a] &&
-        ev.mouse.x <= carta_pos_x[a] + al_get_bitmap_width(baralho) &&
-        ev.mouse.y >= carta_pos_y[a] &&
-        ev.mouse.y <= carta_pos_y[a] +  al_get_bitmap_height(baralho)){
+int b;
 
-                       if(carta_click[a]==false && cartamaos<5){
+                        for(a=0;a<7;a++){
+                         for(b=0;b<5;b++){
+                          printf("%s",selecionado[a]);
+                         }
+       if(ev.mouse.x >= carta_pos_x[a] &&
+        ev.mouse.x <= carta_pos_x[a] + al_get_bitmap_width(carta[a]) &&
+        ev.mouse.y >= carta_pos_y[a] &&
+        ev.mouse.y <= carta_pos_y[a] +  al_get_bitmap_height(carta[a])){
+
+
+                       if(carta_click[a]==false && cartamaos<=5){
                         cartamaos++;
                        carta_pos_y[a]-=200;
                        carta_click[a]=true;
+                       selecionado[a]=mao[possel];
+                       possel++;
+                       printf("carta %s selecionada", mao[a]);
         }
-                    else{
+
+                    else if(carta_click[a]==true){
 
                        carta_pos_y[a]+=200;
                        carta_click[a]=false;
+                       selecionado[a]='\0';
+                       possel--;
                        cartamaos--;
+                       printf("carta %s deselecionada", mao[a]);
                     }
 
                         }

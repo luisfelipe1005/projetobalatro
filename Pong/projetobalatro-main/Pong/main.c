@@ -226,11 +226,12 @@ int comparador(const void *a, const void *b);
         shuffle(cartas,size);
 int nmrcartatopo=0;
 char *mao[7];
+char *discarte[52];
+int disc_ind=0;
 char image_path[50];
-bool carta_click[7]={false};
+bool carta_click[7]={false,false,false,false,false,false,false};
 int cartamaos=1;
 
-char *selecionado[5]={'\0','\0','\0','\0','\0'};
 int possel=0;
 
 
@@ -490,29 +491,37 @@ if (!carta[a]) {
         ev.mouse.y <= botjog_pos_y+  al_get_bitmap_height(botjog)){
                         printf("botao tocado");
 char *maoselec[5];
-int b=0;
+int cont_selec=0;
 
-for(a=0;a<5;a++){
-    for(b=b;b<7;b++){
-        if(carta_click[b]){
-            maoselec[a]=mao[b];
-            break;
+for(a=0;a<7;a++){
+        if(carta_click[a]){
+            maoselec[cont_selec]=mao[a];
+            cont_selec++;
+
         }
-
-    }
-            printf("\n %s",maoselec[a]);
 
 
 
 }
 
+for(a=0;a<cont_selec;a++){
 
 
 
+            printf("\n %s",maoselec[a]);
 
-       bool flush=isflush(maoselec, 5);
-   int multiplos=ismultiple(maoselec, 5);
-  bool sequencia=issequence(maoselec, 5);
+
+
+}
+bool flush=false,sequencia=false;
+
+if(cont_selec==5){
+   flush=isflush(maoselec, cont_selec);
+   sequencia=issequence(maoselec, cont_selec);
+
+}
+   int multiplos=ismultiple(maoselec, cont_selec);
+
    int fichas,mult;
    printf("\n");
 
@@ -564,6 +573,29 @@ for(a=0;a<5;a++){
    }
 
 printf("\nSua pontuacao e: %d e seu mult e %d dando um total de %d:",fichas,mult,fichas*mult);
+
+for(a=0;a<7;a++){
+        if(carta_click[a]){
+              carta_click[a] =false;
+            discarte[disc_ind]=maoselec[a];
+            disc_ind++;
+             al_destroy_bitmap(carta[a]);
+mao[a]=cartas[nmrcartatopo];
+nmrcartatopo++;
+    sprintf(image_path, "imagens/%s.png", mao[a]);
+    printf("\n%s",image_path);
+        carta[a] = al_load_bitmap(image_path);
+if (!carta[a]) {
+    fprintf(stderr, "Failed to load image for carta %d e %s\n", a, mao[a]);
+    exit(-1);
+}
+        }
+
+
+
+}
+
+
                     }
 
 
@@ -900,10 +932,10 @@ for( k = 0; k < nmrd; k++) {
 }
 
 if(fullhouse && maior <4){
-return 7; //7 é o codigo para fullhouse
+return 7; //7 Ã© o codigo para fullhouse
 }
 else if(dpares){
-return 6; //6 é o codigo para dois pares
+return 6; //6 Ã© o codigo para dois pares
 }
 else{
 return maior;

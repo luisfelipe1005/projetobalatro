@@ -20,6 +20,10 @@
     #include <stdbool.h>
     #include <time.h>
 void shuffle(char **array, size_t n);
+bool isflush(char **array, size_t n);
+int ismultiple(char **array, size_t n);
+bool issequence(char **array, size_t n);
+int comparador(const void *a, const void *b);
 
     const float FPS = 90;
 
@@ -36,6 +40,10 @@ void shuffle(char **array, size_t n);
     const int BARALHO_LARGURA = 257;
 
     const int BARALHO_ALTURA = 506;
+
+    const int BOTAO_LARGURA = 257;
+
+    const int BOTAO_ALTURA = 124;
 
 
 
@@ -138,7 +146,11 @@ void shuffle(char **array, size_t n);
 
         ALLEGRO_BITMAP *baralho = NULL;
 
-        ALLEGRO_BITMAP *carta[7] = {NULL};
+        ALLEGRO_BITMAP *botjog = NULL;
+
+        ALLEGRO_BITMAP *botdisc = NULL;
+
+        ALLEGRO_BITMAP *carta[7] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL};
 
 
 
@@ -166,9 +178,19 @@ void shuffle(char **array, size_t n);
 
         float rebatedorDireita_vy = 0;
 
+
         float baralho_pos_x = SCREEN_W - BARALHO_LARGURA;
 
-        float baralho_pos_y = SCREEN_H/1.5 /  - BOLA_TAMANHO / 2.0 ;
+        float baralho_pos_y = SCREEN_H/1.5 /  - BARALHO_ALTURA  / 2.0 ;
+
+        float botjog_pos_x = SCREEN_W/2 -BARALHO_LARGURA/2;
+
+        float botjog_pos_y = SCREEN_H/3 + BARALHO_ALTURA/2.5 ;
+
+
+        float botdisc_pos_x = SCREEN_W/1.8 - BARALHO_LARGURA/4;
+
+        float botdisc_pos_y = SCREEN_H/3 + BARALHO_ALTURA/2.5 ;
 
         float carta_pos_x[7];
         float carta_pos_y[7];
@@ -198,11 +220,15 @@ void shuffle(char **array, size_t n);
 
         baralho=al_load_bitmap("imagens/baralho.png");
 
+        botjog=al_load_bitmap("imagens/botao_jogarmao.png");
+
+        botdisc=al_load_bitmap("imagens/botao_discartarmao.png");
 
          char *cartas[] = {
  "AO", "AE", "AC", "AP", "2O", "2E", "2C", "2P","3O", "3E", "3C", "3P","4O", "4E", "4C", "4P","5O", "5E", "5C", "5P","6O", "6E", "6C", "6P","7O", "7E", "7C", "7P","8O", "8E", "8C", "8P","9O", "9E", "9C", "9P","0O", "0E", "0C", "0P","JO", "JE", "JC", "JP","QO", "QE", "QC", "QP","KO", "KE", "KC", "KP"
 };
 
+int mao_num[5];
     int size = sizeof(cartas) / sizeof(cartas[0]);
 
 
@@ -210,12 +236,12 @@ void shuffle(char **array, size_t n);
         shuffle(cartas,size);
 int nmrcartatopo=0;
 char *mao[7];
+char *discarte[52];
+int disc_ind=0;
 char image_path[50];
-bool carta_click[7]={false};
+bool carta_click[7]={false,false,false,false,false,false,false};
 int cartamaos=1;
 
-char *selecionado[5]={'\0','\0','\0','\0','\0'};
-int possel=0;
 
 
 for (a = 0; a < 7; a++) {
@@ -304,6 +330,45 @@ if (!carta[a]) {
         {
 
             fprintf(stderr, "falhou ao criar o baralho bitmap!\n");
+
+            al_destroy_display(display);
+
+            al_destroy_timer(timer);
+
+            al_destroy_bitmap(bola);
+
+            al_destroy_bitmap(rebatedorEsquerda);
+
+            al_destroy_bitmap(rebatedorDireita);
+
+            return -1;
+
+        }
+
+                if(!botjog)
+
+        {
+
+            fprintf(stderr, "falhou ao criar o botao de jogar carta bitmap!\n");
+
+            al_destroy_display(display);
+
+            al_destroy_timer(timer);
+
+            al_destroy_bitmap(bola);
+
+            al_destroy_bitmap(rebatedorEsquerda);
+
+            al_destroy_bitmap(rebatedorDireita);
+
+            return -1;
+
+        }
+                       if(!botdisc)
+
+        {
+
+            fprintf(stderr, "falhou ao criar o botao de descartar carta bitmap!\n");
 
             al_destroy_display(display);
 
@@ -448,12 +513,174 @@ if (!carta[a]) {
                         printf("baralho tocado");
                     }
 
-int b;
+                    if(ev.mouse.x >= botjog_pos_x &&
+        ev.mouse.x <= botjog_pos_x + al_get_bitmap_width(botjog) &&
+        ev.mouse.y >= botjog_pos_y &&
+        ev.mouse.y <= botjog_pos_y+  al_get_bitmap_height(botjog)){
+                        printf("botao compra tocado");
+char *maoselec[5];
+int cont_selec=0;
+
+for(a=0;a<7;a++){
+        if(carta_click[a]){
+            maoselec[cont_selec]=mao[a];
+            cont_selec++;
+
+        }
+
+
+
+}
+
+for(a=0;a< cont_selec  ;a++){
+
+
+
+            printf("\n %s",maoselec[a]);
+
+
+
+}
+bool flush=false,sequencia=false;
+
+if(cont_selec==5){
+   flush=isflush(maoselec, cont_selec);
+   sequencia=issequence(maoselec, cont_selec);
+
+}
+   int multiplos=ismultiple(maoselec, cont_selec);
+
+   int fichas,mult;
+   printf("\n");
+
+    if(flush && sequencia){
+       printf("straight flush");
+       fichas = 100;
+       mult=8;
+   }
+    else if(multiplos==4){
+       printf("Quadra");
+       fichas = 60;
+       mult=7;
+   }
+    else if(multiplos==7){
+       printf("Full house");
+       fichas = 40;
+       mult=4;
+   }
+    else if(flush){
+       printf("Flush");
+       fichas = 35;
+       mult=4;
+
+   }else if(sequencia){
+       printf("straight");
+       fichas = 30;
+       mult=4;
+
+   }
+    else if(multiplos==3){
+       printf("Trinca");
+       fichas = 30;
+       mult=3;
+   }
+    else if(multiplos==6){
+       printf("Dois pares");
+       fichas = 20;
+       mult=2;
+   }
+    else if(multiplos==2){
+       printf("par");
+       fichas = 10;
+       mult=2;
+   }
+   else{
+       printf("carta alta");
+       fichas = 5;
+       mult=1;
+   }
+   numerar_baralho(maoselec, cont_selec, mao_num);
+for(a=0;a<cont_selec;a++)
+    fichas+=mao_num[a];
+
+printf("\nSua pontuacao e: %d e seu mult e %d dando um total de %d:",fichas,mult,fichas*mult);
+
+if(nmrcartatopo<size){
+for(a=0;a<7;a++){
+        if(carta_click[a]){
+              carta_click[a] =false;
+            discarte[disc_ind]=mao[a];
+            disc_ind++;
+             al_destroy_bitmap(carta[a]);
+mao[a]=cartas[nmrcartatopo];
+nmrcartatopo++;
+    sprintf(image_path, "imagens/%s.png", mao[a]);
+    printf("\n%s",image_path);
+        carta[a] = al_load_bitmap(image_path);
+if (!carta[a]) {
+    fprintf(stderr, "Failed to load image for carta %d e %s\n", a, mao[a]);
+    exit(-1);
+}
+carta_pos_y[a] = SCREEN_H * 2 - BARALHO_ALTURA * 2;
+        }
+
+
+
+}
+cartamaos = 1;
+printf("Cartas no discarte:\n");
+for(a=0;a<=disc_ind;a++)
+    printf("%s\n",discarte[a]);
+                    }
+
+    else{
+        printf("Você perdeu o jogo, pois comprou todo o baralho");
+        return 0;
+    }
+        }
+
+                    if(ev.mouse.x >= botdisc_pos_x &&
+        ev.mouse.x <= botdisc_pos_x + al_get_bitmap_width(botdisc) &&
+        ev.mouse.y >= botdisc_pos_y &&
+        ev.mouse.y <= botdisc_pos_y+  al_get_bitmap_height(botdisc)){
+                        printf("botao descarte tocado");
+
+if(nmrcartatopo>size){
+for(a=0;a<7;a++){
+        if(carta_click[a]){
+              carta_click[a] =false;
+            discarte[disc_ind]=mao[a];
+            disc_ind++;
+             al_destroy_bitmap(carta[a]);
+mao[a]=cartas[nmrcartatopo];
+nmrcartatopo++;
+    sprintf(image_path, "imagens/%s.png", mao[a]);
+    printf("\n%s",image_path);
+        carta[a] = al_load_bitmap(image_path);
+if (!carta[a]) {
+    fprintf(stderr, "Failed to load image for carta %d e %s\n", a, mao[a]);
+    exit(-1);
+}
+carta_pos_y[a] = SCREEN_H * 2 - BARALHO_ALTURA * 2;
+        }
+
+
+
+}
+cartamaos = 1;
+printf("Cartas no discarte:\n");
+for(a=0;a<disc_ind;a++)
+    printf("%s\n",discarte[a]);
+            }
+    else{
+            printf("Você comprou todas as cartas do baralho");
+
+                    }
+        }
+
+
 
                         for(a=0;a<7;a++){
-                         for(b=0;b<5;b++){
-                          printf("%s",selecionado[a]);
-                         }
        if(ev.mouse.x >= carta_pos_x[a] &&
         ev.mouse.x <= carta_pos_x[a] + al_get_bitmap_width(carta[a]) &&
         ev.mouse.y >= carta_pos_y[a] &&
@@ -464,8 +691,6 @@ int b;
                         cartamaos++;
                        carta_pos_y[a]-=200;
                        carta_click[a]=true;
-                       selecionado[a]=mao[possel];
-                       possel++;
                        printf("carta %s selecionada", mao[a]);
         }
 
@@ -473,12 +698,10 @@ int b;
 
                        carta_pos_y[a]+=200;
                        carta_click[a]=false;
-                       selecionado[a]='\0';
-                       possel--;
                        cartamaos--;
                        printf("carta %s deselecionada", mao[a]);
                     }
-
+break;
                         }
 
                 }
@@ -664,6 +887,10 @@ int b;
                 al_draw_bitmap(bola, bola_pos_x, bola_pos_y, 0);
 
                 al_draw_bitmap(baralho, baralho_pos_x, baralho_pos_y, 0);
+
+                al_draw_bitmap(botjog, botjog_pos_x, botjog_pos_y, 0);
+
+                al_draw_bitmap(botdisc, botdisc_pos_x, botdisc_pos_y, 0);
                 for( a=0;a<7;a++){
 
                 al_draw_bitmap(carta[a], carta_pos_x[a], carta_pos_y[a], 0);
@@ -709,5 +936,139 @@ void shuffle(char **array, size_t n)
           array[j] = array[i];
           array[i] = t;
         }
+    }
+}
+
+
+
+
+bool isflush(char **array, size_t n){
+    int i;
+for(i=1; i<n;i++){
+    if(array[i-1][1] != array[i][1]){
+        return false;
+    }
+}
+
+    return true;
+
+}
+
+int ismultiple(char **array, size_t n) {
+
+char charr[5] = {0},ra;
+
+int count[5] = {0},ir, nmrd = 0;
+
+bool encontrado,par=false,dpares=false,trinca=false,fullhouse=false;
+
+
+int i,j,k;
+for ( i = 0; i < n; i++) {
+ra = array[i][0];
+encontrado = false;
+ir = -1;
+
+for ( j = 0; j < nmrd; j++) {
+ if (charr[j] == ra) {
+encontrado = true;
+ir = j;
+break;
+}
+}
+
+if (encontrado) {
+count[ir]++;
+} else {
+if (nmrd < 5) {
+charr[nmrd] = ra;
+count[nmrd] = 1;
+nmrd++;
+}
+}
+
+}
+
+
+int maior=1;
+
+for( k = 0; k < nmrd; k++) {
+    if(count[k] > maior) {
+        maior = count[k];
+    }
+    if(count[k] == 2 && par==false) {
+        par=true;
+    }
+    else if(count[k] == 2 && par==true) {
+        dpares=true;
+    }
+    else if (count[k] == 3) {
+        trinca=true;
+    }
+    if(trinca==true&&par==true){
+        fullhouse=true;
+    }
+
+
+}
+
+if(fullhouse && maior <4){
+return 7; //7 é o codigo para fullhouse
+}
+else if(dpares){
+return 6; //6 é o codigo para dois pares
+}
+else{
+return maior;
+}
+}
+
+
+bool issequence(char **array, size_t n){
+    int mao[5];
+    numerar_baralho(array, 5,mao);
+    bool sequencia=true;
+
+
+qsort(mao, n, sizeof(int), comparador);
+int k;
+     	for( k = 0; k < n-1; k++) {
+if(mao[k]+1!=mao[k+1]){
+    sequencia=false;
+    break;
+}
+
+}
+
+    return sequencia;
+}
+
+
+
+
+int comparador(const void *a, const void *b) {
+   return ( *(int*)a - *(int*)b );
+}
+
+
+
+
+void numerar_baralho(char **array, size_t n, int* maonumerada){
+int i;
+    for( i=0;i<n;i++){
+    if(array[i][0]=='0')
+       maonumerada[i]=10;
+    else if(array[i][0]=='V')
+        maonumerada[i]=11;
+    else if(array[i][0]=='D')
+        maonumerada[i]=12;
+    else if(array[i][0]=='R')
+        maonumerada[i]=13;
+    else if(array[i][0]=='A')
+        maonumerada[i]=14;
+
+    else{
+        maonumerada[i]=array[i][0]  - '0';
+    }
     }
 }

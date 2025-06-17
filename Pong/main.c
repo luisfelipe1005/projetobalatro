@@ -31,11 +31,6 @@ int comparador(const void *a, const void *b);
 
     const int SCREEN_H = 768;
 
-    const int BOLA_TAMANHO = 77;
-
-    const int REBATEDOR_LARGURA = 257;
-
-    const int REBATEDOR_ALTURA = 506;
 
     const int BARALHO_LARGURA = 257;
 
@@ -136,12 +131,6 @@ int comparador(const void *a, const void *b);
 
         }
 
-        ALLEGRO_BITMAP *bola = NULL;
-
-        ALLEGRO_BITMAP *rebatedorEsquerda = NULL;
-
-        ALLEGRO_BITMAP *rebatedorDireita = NULL;
-
         ALLEGRO_BITMAP *background = NULL;
 
         ALLEGRO_BITMAP *baralho = NULL;
@@ -153,30 +142,6 @@ int comparador(const void *a, const void *b);
         ALLEGRO_BITMAP *carta[7] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL};
 
 
-
-        float bola_pos_x = SCREEN_W / 2.0 - BOLA_TAMANHO / 2.0;
-
-        float bola_pos_y = SCREEN_H / 2.0 - BOLA_TAMANHO / 2.0;
-
-        float bola_vx = -4;
-
-        float bola_vy = -4;
-
-
-
-        float rebatedorEsquerda_pos_x = 0;
-
-        float rebatedorEsquerda_pos_y = SCREEN_H / 2.0 - REBATEDOR_ALTURA / 2.0;
-
-        float rebatedorEsquerda_vy = 0;
-
-
-
-        float rebatedorDireita_pos_x = SCREEN_W - REBATEDOR_LARGURA;
-
-        float rebatedorDireita_pos_y = SCREEN_H / 2.0 - REBATEDOR_ALTURA / 2.0;
-
-        float rebatedorDireita_vy = 0;
 
 
         float baralho_pos_x = SCREEN_W - BARALHO_LARGURA;
@@ -208,13 +173,6 @@ int comparador(const void *a, const void *b);
 
         int savebvy;
 
-
-
-        bola              =  al_load_bitmap("imagens/bola.png");
-
-        rebatedorEsquerda = al_load_bitmap("imagens/maradona.png");
-
-        rebatedorDireita  = al_load_bitmap("imagens/pele.png");
 
         background        = al_load_bitmap("imagens/campo.png");
 
@@ -256,53 +214,9 @@ if (!carta[a]) {
 
     }
 
-        if(!bola)
+        
 
-        {
-
-            fprintf(stderr, "falhou ao criar a bola bitmap!\n");
-
-            al_destroy_display(display);
-
-            al_destroy_timer(timer);
-
-            return -1;
-
-        }
-
-        if(!rebatedorEsquerda)
-
-        {
-
-            fprintf(stderr, "falhou ao criar o rebatedoresquerda bitmap!\n");
-
-            al_destroy_display(display);
-
-            al_destroy_timer(timer);
-
-            al_destroy_bitmap(bola);
-
-            return -1;
-
-        }
-
-        if(!rebatedorDireita)
-
-        {
-
-            fprintf(stderr, "falhou ao criar o rebatedordireita bitmap!\n");
-
-            al_destroy_display(display);
-
-            al_destroy_timer(timer);
-
-            al_destroy_bitmap(bola);
-
-            al_destroy_bitmap(rebatedorEsquerda);
-
-            return -1;
-
-        }
+       
 
         if(!background)
 
@@ -314,11 +228,6 @@ if (!carta[a]) {
 
             al_destroy_timer(timer);
 
-            al_destroy_bitmap(bola);
-
-            al_destroy_bitmap(rebatedorEsquerda);
-
-            al_destroy_bitmap(rebatedorDireita);
 
             return -1;
 
@@ -335,11 +244,6 @@ if (!carta[a]) {
 
             al_destroy_timer(timer);
 
-            al_destroy_bitmap(bola);
-
-            al_destroy_bitmap(rebatedorEsquerda);
-
-            al_destroy_bitmap(rebatedorDireita);
 
             return -1;
 
@@ -355,12 +259,6 @@ if (!carta[a]) {
 
             al_destroy_timer(timer);
 
-            al_destroy_bitmap(bola);
-
-            al_destroy_bitmap(rebatedorEsquerda);
-
-            al_destroy_bitmap(rebatedorDireita);
-
             return -1;
 
         }
@@ -374,15 +272,10 @@ if (!carta[a]) {
 
             al_destroy_timer(timer);
 
-            al_destroy_bitmap(bola);
-
-            al_destroy_bitmap(rebatedorEsquerda);
-
-            al_destroy_bitmap(rebatedorDireita);
-
             return -1;
 
         }
+        for(a=0;a<7;a++){
         if(!carta[0])
 
         {
@@ -393,15 +286,10 @@ if (!carta[a]) {
 
             al_destroy_timer(timer);
 
-            al_destroy_bitmap(bola);
-
-            al_destroy_bitmap(rebatedorEsquerda);
-
-            al_destroy_bitmap(rebatedorDireita);
 
             return -1;
 
-        }
+        }}
 
         al_set_target_bitmap(al_get_backbuffer(display));
 
@@ -415,11 +303,6 @@ if (!carta[a]) {
 
             fprintf(stderr, "failed to create event_queue!\n");
 
-            al_destroy_bitmap(bola);
-
-            al_destroy_bitmap(rebatedorEsquerda);
-
-            al_destroy_bitmap(rebatedorDireita);
 
             al_destroy_bitmap(background);
 
@@ -477,33 +360,7 @@ if (!carta[a]) {
 
                     printf("x:%d y:%d\n",ev.mouse.x, ev.mouse.y);
 
-                    if(click==0)
-
-                    {
-
-                        savebvx=bola_vx;
-
-                        savebvy=bola_vy;
-
-                        bola_vx=0;
-
-                        bola_vy=0;
-
-                        click=1;
-
-                    }
-
-                    else
-
-                    {
-
-                        bola_vx=savebvx;
-
-                        bola_vy=savebvy;
-
-                        click=0;
-
-                    }
+                    
 
 
                     if(ev.mouse.x >= baralho_pos_x &&
@@ -605,9 +462,14 @@ for(a=0;a<cont_selec;a++)
 
 printf("\nSua pontuacao e: %d e seu mult e %d dando um total de %d:",fichas,mult,fichas*mult);
 
-if(nmrcartatopo<size){
+
 for(a=0;a<7;a++){
-        if(carta_click[a]){
+    if(disc_ind!=52){
+        printf("Deckout");
+    break;
+        
+    }
+        else if(carta_click[a]){
               carta_click[a] =false;
             discarte[disc_ind]=mao[a];
             disc_ind++;
@@ -633,8 +495,7 @@ for(a=0;a<=disc_ind;a++)
     printf("%s\n",discarte[a]);
                     }
 
-    else{
-        printf("Você perdeu o jogo, pois comprou todo o baralho");
+ 
         return 0;
     }
         }
@@ -645,7 +506,7 @@ for(a=0;a<=disc_ind;a++)
         ev.mouse.y <= botdisc_pos_y+  al_get_bitmap_height(botdisc)){
                         printf("botao descarte tocado");
 
-if(nmrcartatopo>size){
+if(disc_ind!=52){
 for(a=0;a<7;a++){
         if(carta_click[a]){
               carta_click[a] =false;
@@ -670,12 +531,9 @@ carta_pos_y[a] = SCREEN_H * 2 - BARALHO_ALTURA * 2;
 cartamaos = 1;
 printf("Cartas no discarte:\n");
 for(a=0;a<disc_ind;a++)
-    printf("%s\n",discarte[a]);
+    printf("%s\n",discarte[a]);sprint
             }
-    else{
-            printf("Você comprou todas as cartas do baralho");
-
-                    }
+  
         }
 
 
@@ -712,61 +570,6 @@ break;
 
             {
 
-                if(bola_pos_y < 0 || bola_pos_y > SCREEN_H - BOLA_TAMANHO)
-
-                {
-
-                    bola_vy = -bola_vy;
-
-                }
-
-
-
-                if(bola_pos_x < 0 || bola_pos_x > SCREEN_W - BOLA_TAMANHO)
-
-                {
-
-                    bola_pos_x = SCREEN_W / 2.0 - BOLA_TAMANHO / 2.0;
-
-                    bola_pos_y = SCREEN_H / 2.0 - BOLA_TAMANHO / 2.0;
-
-                    bola_vx = -4, bola_vy = -4;
-
-                }
-
-
-
-                if(bola_pos_x <= rebatedorEsquerda_pos_x + REBATEDOR_LARGURA)
-
-                    if(bola_pos_y+BOLA_TAMANHO>=rebatedorEsquerda_pos_y)
-
-                        if(bola_pos_y-BOLA_TAMANHO<=rebatedorEsquerda_pos_y+REBATEDOR_ALTURA)
-
-                            bola_vx = -bola_vx;
-
-
-
-                if(bola_pos_x + BOLA_TAMANHO >= rebatedorDireita_pos_x )
-
-                    if(bola_pos_y+BOLA_TAMANHO>=rebatedorDireita_pos_y)
-
-                        if(bola_pos_y-BOLA_TAMANHO<=rebatedorDireita_pos_y+REBATEDOR_ALTURA)
-
-                            bola_vx = -bola_vx;
-
-
-
-                bola_pos_x              += bola_vx;
-
-                bola_pos_y              += bola_vy;
-
-                rebatedorEsquerda_pos_y += rebatedorEsquerda_vy;
-
-                rebatedorDireita_pos_y  += rebatedorDireita_vy;
-
-                redraw = true;
-
-            }
 
             else if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
 
@@ -776,35 +579,7 @@ break;
 
                 {
 
-                case ALLEGRO_KEY_UP:
-
-                    rebatedorDireita_vy=-4;
-
-                    break;
-
-
-
-                case ALLEGRO_KEY_DOWN:
-
-                    rebatedorDireita_vy=4;
-
-                    break;
-
-
-
-                case ALLEGRO_KEY_W:
-
-                    rebatedorEsquerda_vy=-4;
-
-                    break;
-
-                case ALLEGRO_KEY_S:
-
-                    rebatedorEsquerda_vy=4;
-
-                    break;
-
-
+    
 
 
 
@@ -818,35 +593,7 @@ break;
 
             }
 
-            else if(ev.type == ALLEGRO_EVENT_KEY_UP)
-
-            {
-
-                switch(ev.keyboard.keycode)
-
-                {
-
-                case ALLEGRO_KEY_UP:
-
-                case ALLEGRO_KEY_DOWN:
-
-                    rebatedorDireita_vy=0;
-
-                    break;
-
-
-
-                case ALLEGRO_KEY_W:
-
-                case ALLEGRO_KEY_S:
-
-                    rebatedorEsquerda_vy=0;
-
-                    break;
-
-                }
-
-            }
+    
 
             else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 
@@ -880,11 +627,7 @@ break;
         0                                      // flags
     );
 
-                al_draw_bitmap(rebatedorEsquerda,rebatedorEsquerda_pos_x, rebatedorEsquerda_pos_y, 0);
-
-                al_draw_bitmap(rebatedorDireita,rebatedorDireita_pos_x, rebatedorDireita_pos_y, 0);
-
-                al_draw_bitmap(bola, bola_pos_x, bola_pos_y, 0);
+               
 
                 al_draw_bitmap(baralho, baralho_pos_x, baralho_pos_y, 0);
 
@@ -896,7 +639,7 @@ break;
                 al_draw_bitmap(carta[a], carta_pos_x[a], carta_pos_y[a], 0);
                 }
     char texto[50];
-    sprintf(texto, "x:%.1f y:%.1f",rebatedorEsquerda_pos_y, rebatedorDireita_pos_y);
+    sprintf(texto, "x:%.1f y:%.1f",ev.mouse.x, ev.mouse.y);
     al_draw_text(font, al_map_rgb(255, 255, 255), 20, 20, ALLEGRO_ALIGN_LEFT, texto);
                 al_flip_display();
 
@@ -905,12 +648,6 @@ break;
         }
 
 
-
-        al_destroy_bitmap(bola);
-
-        al_destroy_bitmap(rebatedorEsquerda);
-
-        al_destroy_bitmap(rebatedorDireita);
 
         al_destroy_timer(timer);
 

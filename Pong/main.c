@@ -24,6 +24,7 @@ bool isflush(char **array, size_t n);
 int ismultiple(char **array, size_t n);
 bool issequence(char **array, size_t n);
 int comparador(const void *a, const void *b);
+void numerar_baralho(char **array, size_t n, int* a);
 
     const float FPS = 90;
 
@@ -42,9 +43,8 @@ int comparador(const void *a, const void *b);
 
 
 
-    int main(int argc, char **argv)
-
-    {al_init_font_addon();
+    int main(int argc, char **argv){
+        al_init_font_addon();
     al_init_ttf_addon();
 
         ALLEGRO_DISPLAY *display = NULL;
@@ -148,12 +148,12 @@ int comparador(const void *a, const void *b);
 
         float baralho_pos_y = SCREEN_H/1.5 /  - BARALHO_ALTURA  / 2.0 ;
 
-        float botjog_pos_x = SCREEN_W/2 -BARALHO_LARGURA/2;
+        float botjog_pos_x = SCREEN_W/2 - BOTAO_LARGURA - 10;
 
         float botjog_pos_y = SCREEN_H/3 + BARALHO_ALTURA/2.5 ;
 
 
-        float botdisc_pos_x = SCREEN_W/1.8 - BARALHO_LARGURA/4;
+      float botdisc_pos_x = SCREEN_W/2 + 10;
 
         float botdisc_pos_y = SCREEN_H/3 + BARALHO_ALTURA/2.5 ;
 
@@ -185,7 +185,7 @@ int comparador(const void *a, const void *b);
          char *cartas[] = {
  "AO", "AE", "AC", "AP", "2O", "2E", "2C", "2P","3O", "3E", "3C", "3P","4O", "4E", "4C", "4P","5O", "5E", "5C", "5P","6O", "6E", "6C", "6P","7O", "7E", "7C", "7P","8O", "8E", "8C", "8P","9O", "9E", "9C", "9P","0O", "0E", "0C", "0P","JO", "JE", "JC", "JP","QO", "QE", "QC", "QP","KO", "KE", "KC", "KP"
 };
-
+int total=0;
 int mao_num[5];
     int size = sizeof(cartas) / sizeof(cartas[0]);
 
@@ -214,9 +214,9 @@ if (!carta[a]) {
 
     }
 
-        
 
-       
+
+
 
         if(!background)
 
@@ -276,7 +276,7 @@ if (!carta[a]) {
 
         }
         for(a=0;a<7;a++){
-        if(!carta[0])
+        if(!carta[a])
 
         {
 
@@ -360,7 +360,7 @@ if (!carta[a]) {
 
                     printf("x:%d y:%d\n",ev.mouse.x, ev.mouse.y);
 
-                    
+
 
 
                     if(ev.mouse.x >= baralho_pos_x &&
@@ -407,7 +407,7 @@ if(cont_selec==5){
 }
    int multiplos=ismultiple(maoselec, cont_selec);
 
-   int fichas,mult;
+   int fichas,mult,total=0;
    printf("\n");
 
     if(flush && sequencia){
@@ -460,14 +460,15 @@ if(cont_selec==5){
 for(a=0;a<cont_selec;a++)
     fichas+=mao_num[a];
 
-printf("\nSua pontuacao e: %d e seu mult e %d dando um total de %d:",fichas,mult,fichas*mult);
+    total+=fichas*mult;
+printf("\nSua pontuacao e: %d e seu mult e %d dando um total de %d:",fichas,mult,total);
 
 
 for(a=0;a<7;a++){
     if(disc_ind!=52){
         printf("Deckout");
     break;
-        
+
     }
         else if(carta_click[a]){
               carta_click[a] =false;
@@ -495,10 +496,9 @@ for(a=0;a<=disc_ind;a++)
     printf("%s\n",discarte[a]);
                     }
 
- 
-        return 0;
-    }
-        }
+
+
+
 
                     if(ev.mouse.x >= botdisc_pos_x &&
         ev.mouse.x <= botdisc_pos_x + al_get_bitmap_width(botdisc) &&
@@ -523,6 +523,7 @@ if (!carta[a]) {
     exit(-1);
 }
 carta_pos_y[a] = SCREEN_H * 2 - BARALHO_ALTURA * 2;
+redraw=true;
         }
 
 
@@ -531,9 +532,9 @@ carta_pos_y[a] = SCREEN_H * 2 - BARALHO_ALTURA * 2;
 cartamaos = 1;
 printf("Cartas no discarte:\n");
 for(a=0;a<disc_ind;a++)
-    printf("%s\n",discarte[a]);sprint
+    printf("%s\n",discarte[a]);
             }
-  
+
         }
 
 
@@ -563,15 +564,16 @@ break;
                         }
 
                 }
+                }
 
 
 
-            }}else if(ev.type == ALLEGRO_EVENT_TIMER)
+            }else if(ev.type == ALLEGRO_EVENT_TIMER)
 
             {
 
 
-            else if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
+            }else if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
 
             {
 
@@ -579,7 +581,7 @@ break;
 
                 {
 
-    
+
 
 
 
@@ -593,7 +595,7 @@ break;
 
             }
 
-    
+
 
             else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
 
@@ -627,7 +629,7 @@ break;
         0                                      // flags
     );
 
-               
+
 
                 al_draw_bitmap(baralho, baralho_pos_x, baralho_pos_y, 0);
 
@@ -639,7 +641,7 @@ break;
                 al_draw_bitmap(carta[a], carta_pos_x[a], carta_pos_y[a], 0);
                 }
     char texto[50];
-    sprintf(texto, "x:%.1f y:%.1f",ev.mouse.x, ev.mouse.y);
+    sprintf(texto, "fichas",total);
     al_draw_text(font, al_map_rgb(255, 255, 255), 20, 20, ALLEGRO_ALIGN_LEFT, texto);
                 al_flip_display();
 
@@ -660,6 +662,7 @@ break;
         return 0;
 
     }
+
 
 void shuffle(char **array, size_t n)
 {
@@ -795,11 +798,11 @@ int i;
     for( i=0;i<n;i++){
     if(array[i][0]=='0')
        maonumerada[i]=10;
-    else if(array[i][0]=='V')
+    else if(array[i][0]=='J')
         maonumerada[i]=11;
-    else if(array[i][0]=='D')
+    else if(array[i][0]=='Q')
         maonumerada[i]=12;
-    else if(array[i][0]=='R')
+    else if(array[i][0]=='K')
         maonumerada[i]=13;
     else if(array[i][0]=='A')
         maonumerada[i]=14;

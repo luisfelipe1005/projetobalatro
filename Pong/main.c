@@ -1,3 +1,4 @@
+
     /* Copyright (C) 2016 Marcelo Serrano Zanetti - All Rights Reserved
 
      * Licensed under the GNU GPL V3.0 license. All conditions apply.
@@ -185,7 +186,6 @@ void numerar_baralho(char **array, size_t n, int* a);
          char *cartas[] = {
  "AO", "AE", "AC", "AP", "2O", "2E", "2C", "2P","3O", "3E", "3C", "3P","4O", "4E", "4C", "4P","5O", "5E", "5C", "5P","6O", "6E", "6C", "6P","7O", "7E", "7C", "7P","8O", "8E", "8C", "8P","9O", "9E", "9C", "9P","0O", "0E", "0C", "0P","JO", "JE", "JC", "JP","QO", "QE", "QC", "QP","KO", "KE", "KC", "KP"
 };
-int total=0;
 int mao_num[5];
     int size = sizeof(cartas) / sizeof(cartas[0]);
 
@@ -198,8 +198,10 @@ char *discarte[52];
 int disc_ind=0;
 char image_path[50];
 bool carta_click[7]={false,false,false,false,false,false,false};
-int cartamaos=1;
-
+int cartamaos=0;
+char texto[50];
+int total=0;
+int cont_selec=0;
 
 
 for (a = 0; a < 7; a++) {
@@ -346,7 +348,16 @@ if (!carta[a]) {
 
             al_wait_for_event(event_queue, &ev);
 
+  sprintf(texto, "fichas: %d",total);
+    al_draw_text(font, al_map_rgb(255, 255, 255), 20, 20, ALLEGRO_ALIGN_LEFT, texto);
+      sprintf(texto, "%d/7",cartamaos);
+    al_draw_text(font, al_map_rgb(255, 255, 255), 440, 640, ALLEGRO_ALIGN_LEFT, texto);
+          sprintf(texto, "%d/%d",size-nmrcartatopo,size);
+    al_draw_text(font, al_map_rgb(255, 255, 255), 800, 200, ALLEGRO_ALIGN_LEFT, texto);
 
+
+
+        al_flip_display();
 
             if(ev.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 
@@ -376,10 +387,9 @@ if (!carta[a]) {
         ev.mouse.y <= botjog_pos_y+  al_get_bitmap_height(botjog)){
                         printf("botao compra tocado");
 char *maoselec[5];
-int cont_selec=0;
 
 for(a=0;a<7;a++){
-        if(carta_click[a]){
+        if(carta_click[a]&& cont_selec < 5){
             maoselec[cont_selec]=mao[a];
             cont_selec++;
 
@@ -407,7 +417,7 @@ if(cont_selec==5){
 }
    int multiplos=ismultiple(maoselec, cont_selec);
 
-   int fichas,mult,total=0;
+   int fichas,mult;
    printf("\n");
 
     if(flush && sequencia){
@@ -464,17 +474,23 @@ for(a=0;a<cont_selec;a++)
 printf("\nSua pontuacao e: %d e seu mult e %d dando um total de %d:",fichas,mult,total);
 
 
-for(a=0;a<7;a++){
-    if(disc_ind!=52){
-        printf("Deckout");
-    break;
 
-    }
-        else if(carta_click[a]){
+
+
+for(a=0;a<7;a++){
+
+         if(carta_click[a]){
+                 redraw = true;
               carta_click[a] =false;
             discarte[disc_ind]=mao[a];
-            disc_ind++;
              al_destroy_bitmap(carta[a]);
+ carta[a] = NULL;
+
+    if (nmrcartatopo < size) {
+
+
+
+            disc_ind++;
 mao[a]=cartas[nmrcartatopo];
 nmrcartatopo++;
     sprintf(image_path, "imagens/%s.png", mao[a]);
@@ -484,15 +500,15 @@ if (!carta[a]) {
     fprintf(stderr, "Failed to load image for carta %d e %s\n", a, mao[a]);
     exit(-1);
 }
-carta_pos_y[a] = SCREEN_H * 2 - BARALHO_ALTURA * 2;
-        }
 
+carta_pos_y[a] = SCREEN_H * 2 - BARALHO_ALTURA * 2;
+        }}
 
 
 }
-cartamaos = 1;
+cartamaos = 0;
 printf("Cartas no discarte:\n");
-for(a=0;a<=disc_ind;a++)
+for(a=0;a<disc_ind;a++)
     printf("%s\n",discarte[a]);
                     }
 
@@ -506,13 +522,17 @@ for(a=0;a<=disc_ind;a++)
         ev.mouse.y <= botdisc_pos_y+  al_get_bitmap_height(botdisc)){
                         printf("botao descarte tocado");
 
-if(disc_ind!=52){
 for(a=0;a<7;a++){
         if(carta_click[a]){
               carta_click[a] =false;
             discarte[disc_ind]=mao[a];
-            disc_ind++;
              al_destroy_bitmap(carta[a]);
+ carta[a] = NULL;
+  if (nmrcartatopo < size) {
+
+
+
+            disc_ind++;
 mao[a]=cartas[nmrcartatopo];
 nmrcartatopo++;
     sprintf(image_path, "imagens/%s.png", mao[a]);
@@ -523,17 +543,17 @@ if (!carta[a]) {
     exit(-1);
 }
 carta_pos_y[a] = SCREEN_H * 2 - BARALHO_ALTURA * 2;
-redraw=true;
-        }
+
+        }}
 
 
 
 }
-cartamaos = 1;
+cartamaos = 0;
 printf("Cartas no discarte:\n");
 for(a=0;a<disc_ind;a++)
     printf("%s\n",discarte[a]);
-            }
+
 
         }
 
@@ -546,7 +566,7 @@ for(a=0;a<disc_ind;a++)
         ev.mouse.y <= carta_pos_y[a] +  al_get_bitmap_height(carta[a])){
 
 
-                       if(carta_click[a]==false && cartamaos<=5){
+                       if(carta_click[a]==false && cartamaos<5){
                         cartamaos++;
                        carta_pos_y[a]-=200;
                        carta_click[a]=true;
@@ -564,13 +584,16 @@ break;
                         }
 
                 }
+
+
                 }
-
-
 
             }else if(ev.type == ALLEGRO_EVENT_TIMER)
 
             {
+
+                redraw=true;
+
 
 
             }else if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
@@ -611,6 +634,8 @@ break;
 
             {
 
+
+
                 redraw = false;
 
 
@@ -640,14 +665,12 @@ break;
 
                 al_draw_bitmap(carta[a], carta_pos_x[a], carta_pos_y[a], 0);
                 }
-    char texto[50];
-    sprintf(texto, "fichas",total);
-    al_draw_text(font, al_map_rgb(255, 255, 255), 20, 20, ALLEGRO_ALIGN_LEFT, texto);
-                al_flip_display();
+
 
             }
 
         }
+
 
 
 
@@ -696,9 +719,9 @@ for(i=1; i<n;i++){
 
 int ismultiple(char **array, size_t n) {
 
-char charr[5] = {0},ra;
+char charr[5] = {0,0,0,0,0},ra;
 
-int count[5] = {0},ir, nmrd = 0;
+int count[5] = {0,0,0,0,0},ir, nmrd = 0;
 
 bool encontrado,par=false,dpares=false,trinca=false,fullhouse=false;
 
@@ -720,7 +743,7 @@ break;
 if (encontrado) {
 count[ir]++;
 } else {
-if (nmrd < 5) {
+if (nmrd < n) {
 charr[nmrd] = ra;
 count[nmrd] = 1;
 nmrd++;

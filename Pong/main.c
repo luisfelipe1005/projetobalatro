@@ -340,7 +340,7 @@ if (!carta[a]) {
 
 
 
-        while(1)
+ while(1)
 
         {
 
@@ -348,16 +348,7 @@ if (!carta[a]) {
 
             al_wait_for_event(event_queue, &ev);
 
-  sprintf(texto, "fichas: %d",total);
-    al_draw_text(font, al_map_rgb(255, 255, 255), 20, 20, ALLEGRO_ALIGN_LEFT, texto);
-      sprintf(texto, "%d/7",cartamaos);
-    al_draw_text(font, al_map_rgb(255, 255, 255), 440, 640, ALLEGRO_ALIGN_LEFT, texto);
-          sprintf(texto, "%d/%d",size-nmrcartatopo,size);
-    al_draw_text(font, al_map_rgb(255, 255, 255), 800, 200, ALLEGRO_ALIGN_LEFT, texto);
 
-
-
-        al_flip_display();
 
             if(ev.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 
@@ -487,7 +478,7 @@ for(a=0;a<7;a++){
  carta[a] = NULL;
 
     if (nmrcartatopo < size) {
-
+printf("pode comprar");
 
 
             disc_ind++;
@@ -502,7 +493,9 @@ if (!carta[a]) {
 }
 
 carta_pos_y[a] = SCREEN_H * 2 - BARALHO_ALTURA * 2;
-        }}
+        }else
+        printf("nao pode comprar");
+        }
 
 
 }
@@ -560,6 +553,7 @@ for(a=0;a<disc_ind;a++)
 
 
                         for(a=0;a<7;a++){
+                                   if (carta[a] != NULL) {
        if(ev.mouse.x >= carta_pos_x[a] &&
         ev.mouse.x <= carta_pos_x[a] + al_get_bitmap_width(carta[a]) &&
         ev.mouse.y >= carta_pos_y[a] &&
@@ -583,7 +577,7 @@ for(a=0;a<disc_ind;a++)
 break;
                         }
 
-                }
+                }}
 
 
                 }
@@ -635,6 +629,15 @@ break;
             {
 
 
+  sprintf(texto, "fichas: %d",total);
+    al_draw_text(font, al_map_rgb(255, 255, 255), 20, 20, ALLEGRO_ALIGN_LEFT, texto);
+      sprintf(texto, "%d/7",cartamaos);
+    al_draw_text(font, al_map_rgb(255, 255, 255), 440, 640, ALLEGRO_ALIGN_LEFT, texto);
+          sprintf(texto, "%d/%d",size-nmrcartatopo,size);
+    al_draw_text(font, al_map_rgb(255, 255, 255), 800, 200, ALLEGRO_ALIGN_LEFT, texto);
+
+
+        al_flip_display();
 
                 redraw = false;
 
@@ -662,18 +665,14 @@ break;
 
                 al_draw_bitmap(botdisc, botdisc_pos_x, botdisc_pos_y, 0);
                 for( a=0;a<7;a++){
-
+if(carta[a]!=NULL){
                 al_draw_bitmap(carta[a], carta_pos_x[a], carta_pos_y[a], 0);
-                }
+                }}
 
 
             }
 
         }
-
-
-
-
         al_destroy_timer(timer);
 
         al_destroy_display(display);

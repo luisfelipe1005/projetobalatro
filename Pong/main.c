@@ -179,9 +179,9 @@ void numerar_baralho(char **array, size_t n, int* a);
 
         baralho=al_load_bitmap("imagens/baralho.png");
 
-        botjog=al_load_bitmap("imagens/botao_jogarmao.png");
+        botjog=al_load_bitmap("imagens/negbotao_jogarmao.png");
 
-        botdisc=al_load_bitmap("imagens/botao_discartarmao.png");
+        botdisc=al_load_bitmap("imagens/negbotao_discartarmao.png");
 
          char *cartas[] = {
  "AO", "AE", "AC", "AP", "2O", "2E", "2C", "2P","3O", "3E", "3C", "3P","4O", "4E", "4C", "4P","5O", "5E", "5C", "5P","6O", "6E", "6C", "6P","7O", "7E", "7C", "7P","8O", "8E", "8C", "8P","9O", "9E", "9C", "9P","0O", "0E", "0C", "0P","JO", "JE", "JC", "JP","QO", "QE", "QC", "QP","KO", "KE", "KC", "KP"
@@ -350,6 +350,7 @@ if (!carta[a]) {
 
 
 
+
             if(ev.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 
             {
@@ -389,6 +390,8 @@ for(a=0;a<7;a++){
 
 
 }
+
+
 
 for(a=0;a< cont_selec  ;a++){
 
@@ -578,6 +581,16 @@ break;
                         }
 
                 }}
+                  if(cartamaos==0){
+                 redraw = true;
+        botdisc=al_load_bitmap("imagens/negbotao_discartarmao.png");
+        botjog = al_load_bitmap("imagens/negbotao_jogarmao.png");
+            }
+            else{
+                 redraw = true;
+        botdisc=al_load_bitmap("imagens/botao_discartarmao.png");
+        botjog = al_load_bitmap("imagens/botao_jogarmao.png");
+            }
 
 
                 }

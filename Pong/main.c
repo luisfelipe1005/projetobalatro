@@ -199,9 +199,10 @@ int disc_ind=0;
 char image_path[50];
 bool carta_click[7]={false,false,false,false,false,false,false};
 int cartamaos=0;
-char texto[50];
+char texto[50],val_mao[20];
 int total=0;
 int cont_selec=0;
+int jogadas=4,descartes=3;
 
 
 for (a = 0; a < 7; a++) {
@@ -344,6 +345,10 @@ if (!carta[a]) {
 
         {
 
+
+            if(jogadas==0)
+                return 0;
+
             ALLEGRO_EVENT ev;
 
             al_wait_for_event(event_queue, &ev);
@@ -363,6 +368,106 @@ if (!carta[a]) {
 
                     printf("x:%d y:%d\n",ev.mouse.x, ev.mouse.y);
 
+char *maoselec[5];
+
+   int fichas,mult;
+
+
+                        for(a=0;a<7;a++){
+                                   if (carta[a] != NULL) {
+       if(ev.mouse.x >= carta_pos_x[a] &&
+        ev.mouse.x <= carta_pos_x[a] + al_get_bitmap_width(carta[a]) &&
+        ev.mouse.y >= carta_pos_y[a] &&
+        ev.mouse.y <= carta_pos_y[a] +  al_get_bitmap_height(carta[a])){
+
+
+                       if(carta_click[a]==false && cartamaos<5){
+                        cartamaos++;
+                       carta_pos_y[a]-=200;
+                       carta_click[a]=true;
+                       printf("carta %s selecionada", mao[a]);
+        }
+
+                    else if(carta_click[a]==true){
+
+                       carta_pos_y[a]+=200;
+                       carta_click[a]=false;
+                       cartamaos--;
+                       printf("carta %s deselecionada", mao[a]);
+                    }
+break;
+                        }
+  }
+                        }
+                    for(a=0;a<7;a++){
+        if(carta_click[a]&& cont_selec < 5){
+            maoselec[cont_selec]=mao[a];
+            cont_selec++;
+
+        }
+
+
+
+}
+
+                 bool flush=false,sequencia=false;
+                 if(cont_selec==5){
+   flush=isflush(maoselec, cont_selec);
+   sequencia=issequence(maoselec, cont_selec);
+
+}
+   int multiplos=ismultiple(maoselec, cont_selec);if(flush && sequencia){
+       strcpy(val_mao, "straight flush");
+       fichas = 100;
+       mult=8;
+   }
+    else if(multiplos==4){
+       strcpy(val_mao, "Quadra");
+       fichas = 60;
+       mult=7;
+   }
+    else if(multiplos==7){
+       strcpy(val_mao, "Full house");
+       fichas = 40;
+       mult=4;
+   }
+    else if(flush){
+       strcpy(val_mao, "Flush");
+       fichas = 35;
+       mult=4;
+
+   }else if(sequencia){
+       strcpy(val_mao, "straight");
+       fichas = 30;
+       mult=4;
+
+   }
+    else if(multiplos==3){
+       strcpy(val_mao, "Trinca");
+       fichas = 30;
+       mult=3;
+   }
+    else if(multiplos==6){
+       strcpy(val_mao, "Dois pares");
+       fichas = 20;
+       mult=2;
+   }
+    else if(multiplos==2){
+       strcpy(val_mao, "par");
+       fichas = 10;
+       mult=2;
+   }
+   else{
+       strcpy(val_mao, "carta alta");
+       fichas = 5;
+       mult=1;
+   }
+
+
+   printf("\n");
+
+int cont_res=cont_selec;
+   cont_selec=0;
 
 
 
@@ -378,22 +483,12 @@ if (!carta[a]) {
         ev.mouse.y >= botjog_pos_y &&
         ev.mouse.y <= botjog_pos_y+  al_get_bitmap_height(botjog)){
                         printf("botao compra tocado");
-char *maoselec[5];
-
-for(a=0;a<7;a++){
-        if(carta_click[a]&& cont_selec < 5){
-            maoselec[cont_selec]=mao[a];
-            cont_selec++;
-
-        }
 
 
 
-}
 
 
-
-for(a=0;a< cont_selec  ;a++){
+for(a=0;a< cont_res  ;a++){
 
 
 
@@ -402,70 +497,15 @@ for(a=0;a< cont_selec  ;a++){
 
 
 }
-bool flush=false,sequencia=false;
 
-if(cont_selec==5){
-   flush=isflush(maoselec, cont_selec);
-   sequencia=issequence(maoselec, cont_selec);
-
-}
-   int multiplos=ismultiple(maoselec, cont_selec);
-
-   int fichas,mult;
-   printf("\n");
-
-    if(flush && sequencia){
-       printf("straight flush");
-       fichas = 100;
-       mult=8;
-   }
-    else if(multiplos==4){
-       printf("Quadra");
-       fichas = 60;
-       mult=7;
-   }
-    else if(multiplos==7){
-       printf("Full house");
-       fichas = 40;
-       mult=4;
-   }
-    else if(flush){
-       printf("Flush");
-       fichas = 35;
-       mult=4;
-
-   }else if(sequencia){
-       printf("straight");
-       fichas = 30;
-       mult=4;
-
-   }
-    else if(multiplos==3){
-       printf("Trinca");
-       fichas = 30;
-       mult=3;
-   }
-    else if(multiplos==6){
-       printf("Dois pares");
-       fichas = 20;
-       mult=2;
-   }
-    else if(multiplos==2){
-       printf("par");
-       fichas = 10;
-       mult=2;
-   }
-   else{
-       printf("carta alta");
-       fichas = 5;
-       mult=1;
-   }
-   numerar_baralho(maoselec, cont_selec, mao_num);
-for(a=0;a<cont_selec;a++)
+   numerar_baralho(maoselec, cont_res, mao_num);
+for(a=0;a<cont_res;a++){
     fichas+=mao_num[a];
-
+printf("%d\n",mao_num[a]);
+}
     total+=fichas*mult;
 printf("\nSua pontuacao e: %d e seu mult e %d dando um total de %d:",fichas,mult,total);
+jogadas--;
 
 
 
@@ -515,7 +555,7 @@ for(a=0;a<disc_ind;a++)
                     if(ev.mouse.x >= botdisc_pos_x &&
         ev.mouse.x <= botdisc_pos_x + al_get_bitmap_width(botdisc) &&
         ev.mouse.y >= botdisc_pos_y &&
-        ev.mouse.y <= botdisc_pos_y+  al_get_bitmap_height(botdisc)){
+        ev.mouse.y <= botdisc_pos_y+  al_get_bitmap_height(botdisc)&&descartes!=0&&cartamaos!=0){
                         printf("botao descarte tocado");
 
 for(a=0;a<7;a++){
@@ -549,48 +589,25 @@ cartamaos = 0;
 printf("Cartas no discarte:\n");
 for(a=0;a<disc_ind;a++)
     printf("%s\n",discarte[a]);
-
+descartes--;
 
         }
 
 
 
-                        for(a=0;a<7;a++){
-                                   if (carta[a] != NULL) {
-       if(ev.mouse.x >= carta_pos_x[a] &&
-        ev.mouse.x <= carta_pos_x[a] + al_get_bitmap_width(carta[a]) &&
-        ev.mouse.y >= carta_pos_y[a] &&
-        ev.mouse.y <= carta_pos_y[a] +  al_get_bitmap_height(carta[a])){
+if (cartamaos == 0 || descartes == 0) {
+    botdisc = al_load_bitmap("imagens/negbotao_discartarmao.png");
+} else {
+    botdisc = al_load_bitmap("imagens/botao_discartarmao.png");
+}
 
+if (cartamaos == 0) {
+    botjog = al_load_bitmap("imagens/negbotao_jogarmao.png");
+} else {
+    botjog = al_load_bitmap("imagens/botao_jogarmao.png");
+}
 
-                       if(carta_click[a]==false && cartamaos<5){
-                        cartamaos++;
-                       carta_pos_y[a]-=200;
-                       carta_click[a]=true;
-                       printf("carta %s selecionada", mao[a]);
-        }
-
-                    else if(carta_click[a]==true){
-
-                       carta_pos_y[a]+=200;
-                       carta_click[a]=false;
-                       cartamaos--;
-                       printf("carta %s deselecionada", mao[a]);
-                    }
-break;
-                        }
-
-                }}
-                  if(cartamaos==0){
-                 redraw = true;
-        botdisc=al_load_bitmap("imagens/negbotao_discartarmao.png");
-        botjog = al_load_bitmap("imagens/negbotao_jogarmao.png");
-            }
-            else{
-                 redraw = true;
-        botdisc=al_load_bitmap("imagens/botao_discartarmao.png");
-        botjog = al_load_bitmap("imagens/botao_jogarmao.png");
-            }
+redraw = true;
 
 
                 }
@@ -644,10 +661,18 @@ break;
 
   sprintf(texto, "fichas: %d",total);
     al_draw_text(font, al_map_rgb(255, 255, 255), 20, 20, ALLEGRO_ALIGN_LEFT, texto);
+    sprintf(texto, "%s",val_mao);
+    al_draw_text(font, al_map_rgb(255, 255, 255), 20, 40, ALLEGRO_ALIGN_LEFT, texto);
+
       sprintf(texto, "%d/7",cartamaos);
     al_draw_text(font, al_map_rgb(255, 255, 255), 440, 640, ALLEGRO_ALIGN_LEFT, texto);
           sprintf(texto, "%d/%d",size-nmrcartatopo,size);
     al_draw_text(font, al_map_rgb(255, 255, 255), 800, 200, ALLEGRO_ALIGN_LEFT, texto);
+
+          sprintf(texto, "Maos: %d",jogadas);
+    al_draw_text(font, al_map_rgb(255, 255, 255), 800, 525, ALLEGRO_ALIGN_LEFT, texto);
+          sprintf(texto, "Descartes: %d",descartes);
+    al_draw_text(font, al_map_rgb(255, 255, 255), 800, 575, ALLEGRO_ALIGN_LEFT, texto);
 
 
         al_flip_display();
@@ -771,26 +796,26 @@ for( k = 0; k < nmrd; k++) {
     if(count[k] > maior) {
         maior = count[k];
     }
-    if(count[k] == 2 && par==false) {
+    if (count[k] == 3) {
+        trinca=true;
+    }
+    else if(count[k] == 2 && par==false) {
         par=true;
     }
     else if(count[k] == 2 && par==true) {
         dpares=true;
     }
-    else if (count[k] == 3) {
-        trinca=true;
-    }
+
+
+
+}
     if(trinca==true&&par==true){
         fullhouse=true;
     }
-
-
-}
-
-if(fullhouse && maior <4){
+if(fullhouse && maior <4&&n==5){
 return 7; //7 é o codigo para fullhouse
 }
-else if(dpares){
+else if(dpares&&n>=4){
 return 6; //6 é o codigo para dois pares
 }
 else{

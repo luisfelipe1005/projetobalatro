@@ -177,6 +177,9 @@ void numerar_baralho(char **array, size_t n, int* a);
 
         ALLEGRO_BITMAP *carta[7] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL};
 
+        ALLEGRO_BITMAP *menu = NULL;
+
+
 
 
 
@@ -192,6 +195,11 @@ void numerar_baralho(char **array, size_t n, int* a);
       float botdisc_pos_x = SCREEN_W/2 + 10;
 
         float botdisc_pos_y = SCREEN_H/3 + BARALHO_ALTURA/2.5 ;
+
+
+      float menu_pos_x = SCREEN_W/4;
+
+        float menu_pos_y = SCREEN_H/4 ;
 
         float carta_pos_x[7];
         float carta_pos_y[7];
@@ -218,6 +226,9 @@ void numerar_baralho(char **array, size_t n, int* a);
 
         botdisc=al_load_bitmap("imagens/negbotao_discartarmao.png");
 
+
+        menu=al_load_bitmap("imagens/menu.png");
+
          char *cartas[] = {
  "AO", "AE", "AC", "AP", "2O", "2E", "2C", "2P","3O", "3E", "3C", "3P","4O", "4E", "4C", "4P","5O", "5E", "5C", "5P","6O", "6E", "6C", "6P","7O", "7E", "7C", "7P","8O", "8E", "8C", "8P","9O", "9E", "9C", "9P","0O", "0E", "0C", "0P","JO", "JE", "JC", "JP","QO", "QE", "QC", "QP","KO", "KE", "KC", "KP"
 };
@@ -238,6 +249,7 @@ char texto[50],val_mao[20];
 int total=0;
 int cont_selec=0;
 int jogadas=4,descartes=3;
+bool gameover=false, apagaprimeiramensagem=false;
 
 
 for (a = 0; a < 7; a++) {
@@ -313,6 +325,24 @@ if (!carta[a]) {
             return -1;
 
         }
+
+
+                               if(!menu)
+
+        {
+
+            fprintf(stderr, "falhou ao criar o menu bitmap!\n");
+
+            al_destroy_display(display);
+
+            al_destroy_timer(timer);
+
+            return -1;
+
+        }
+
+
+
         for(a=0;a<7;a++){
         if(!carta[a])
 
@@ -380,9 +410,9 @@ if (!carta[a]) {
 
         {
 
+if(jogadas==0)
+    gameover=true;
 
-            if(jogadas==0)
-                return 0;
 
             ALLEGRO_EVENT ev;
 
@@ -391,7 +421,7 @@ if (!carta[a]) {
 
 
 
-            if(ev.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
+            if(ev.type==ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && !gameover && apagaprimeiramensagem)
 
             {
 
@@ -511,6 +541,7 @@ int cont_res=cont_selec;
         ev.mouse.y >= baralho_pos_y &&
         ev.mouse.y <= baralho_pos_y +  al_get_bitmap_height(baralho)){
                         printf("baralho tocado");
+                        music_muted=!music_muted;
                          if (music_muted)
                 {
                     al_set_sample_instance_gain(music_instance, 0.0);
@@ -674,12 +705,15 @@ redraw = true;
 
 
 
-                case ALLEGRO_KEY_ESCAPE:
-
+                case ALLEGRO_KEY_SPACE:
+if(gameover)
                     return 0;
 
                     break;
+                case ALLEGRO_KEY_M:
+ apagaprimeiramensagem=!apagaprimeiramensagem;
 
+                    break;
                 }
 
             }
@@ -716,7 +750,31 @@ redraw = true;
           sprintf(texto, "Descartes: %d",descartes);
     al_draw_text(font, al_map_rgb(255, 255, 255), 800, 575, ALLEGRO_ALIGN_LEFT, texto);
 
+if(gameover){
+          sprintf(texto, "Você perdeu, com uma pontuação de: %d fichas.",total);
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+50, ALLEGRO_ALIGN_LEFT, texto);
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+60, ALLEGRO_ALIGN_LEFT, "Aperte espaço para fechar");
+}
 
+if(!apagaprimeiramensagem){
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+50, ALLEGRO_ALIGN_LEFT, "Bem vindo ao Baluistro!, aqui estão as regras:");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+60, ALLEGRO_ALIGN_LEFT, "Jogue maos de poker, você tem direito a jogar elas 4 vezes");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+70, ALLEGRO_ALIGN_LEFT, "com 3 descartes, cada mao possui um valor, sendo eles a");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+80, ALLEGRO_ALIGN_LEFT, "quantidade de pontos base, e o multiplicador");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+90, ALLEGRO_ALIGN_LEFT, "cada carta adicionada na sua mao adiciona seu");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+100, ALLEGRO_ALIGN_LEFT, "valor na pontuacao base.");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+110, ALLEGRO_ALIGN_LEFT, "Por exemplo: Você joga a mão de um par");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+120, ALLEGRO_ALIGN_LEFT, "com as cartas A de copas e um A de espadas");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+130, ALLEGRO_ALIGN_LEFT, "o par possui pontuacao base 10 e mult 2, cada A vale 14");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+140, ALLEGRO_ALIGN_LEFT, "adicionando 28 dos dois As na pontuacao base da 38");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+150, ALLEGRO_ALIGN_LEFT, "multiplicado por 2 da uma pontuacao de 76 ");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+160, ALLEGRO_ALIGN_LEFT, "Aperte M pra começar a apostar");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+170, ALLEGRO_ALIGN_LEFT, "(Dica: aperte M pra abrir e fechar essa aba enquanto joga!)");
+
+
+
+
+}
         al_flip_display();
 
                 redraw = false;
@@ -729,12 +787,12 @@ redraw = true;
 
                al_draw_scaled_bitmap(
         background,
-        0, 0,                                  // origem da imagem (canto superior esquerdo)
-        al_get_bitmap_width(background),       // largura da imagem original
-        al_get_bitmap_height(background),      // altura da imagem original
-        0, 0,                                  // onde desenhar na tela (canto superior esquerdo)
-        SCREEN_W, SCREEN_H,                    // nova largura e altura (tamanho da tela)
-        0                                      // flags
+        0, 0,
+        al_get_bitmap_width(background),
+        al_get_bitmap_height(background),
+        0, 0,
+        SCREEN_W, SCREEN_H,
+        0
     );
 
 
@@ -748,6 +806,8 @@ redraw = true;
 if(carta[a]!=NULL){
                 al_draw_bitmap(carta[a], carta_pos_x[a], carta_pos_y[a], 0);
                 }}
+if(gameover||!apagaprimeiramensagem)
+                al_draw_bitmap(menu, menu_pos_x, menu_pos_y, 0);
 
 
             }

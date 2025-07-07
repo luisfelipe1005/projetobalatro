@@ -24,6 +24,7 @@
 #include <allegro5/allegro_acodec.h>
     #include <time.h>
     #include <time.h>
+
 void shuffle(char **array, size_t n);
 bool isflush(char **array, size_t n);
 int ismultiple(char **array, size_t n);
@@ -83,7 +84,8 @@ void numerar_baralho(char **array, size_t n, int* a);
 
         }
 
-        ALLEGRO_FONT *font = al_create_builtin_font();
+        ALLEGRO_FONT *font = al_load_ttf_font("./fontebalatro.ttf", 20, 0);
+        // Credito para a fonte: https://managore.itch.io/m6x11
     if (!font) {
         fprintf(stderr, "Erro ao criar fonte builtin!\n");
         return -1;
@@ -228,6 +230,7 @@ void numerar_baralho(char **array, size_t n, int* a);
 
 
         menu=al_load_bitmap("imagens/menu.png");
+        //Credito para o sprite do menu: https://managore.itch.io/m6x11
 
          char *cartas[] = {
  "AO", "AE", "AC", "AP", "2O", "2E", "2C", "2P","3O", "3E", "3C", "3P","4O", "4E", "4C", "4P","5O", "5E", "5C", "5P","6O", "6E", "6C", "6P","7O", "7E", "7C", "7P","8O", "8E", "8C", "8P","9O", "9E", "9C", "9P","0O", "0E", "0C", "0P","JO", "JE", "JC", "JP","QO", "QE", "QC", "QP","KO", "KE", "KC", "KP"
@@ -391,7 +394,7 @@ if (!carta[a]) {
         al_register_event_source(event_queue, al_get_keyboard_event_source());
 
         al_register_event_source(event_queue, al_get_mouse_event_source());
-
+https://managore.itch.io/m6x11
 
 
         al_clear_to_color(al_map_rgb(0,0,0));
@@ -751,25 +754,25 @@ if(gameover)
     al_draw_text(font, al_map_rgb(255, 255, 255), 800, 575, ALLEGRO_ALIGN_LEFT, texto);
 
 if(gameover){
-          sprintf(texto, "Você perdeu, com uma pontuação de: %d fichas.",total);
+          sprintf(texto, "Voce perdeu, com uma pontuacao de: %d fichas.",total);
     al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+50, ALLEGRO_ALIGN_LEFT, texto);
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+60, ALLEGRO_ALIGN_LEFT, "Aperte espaço para fechar");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+70, ALLEGRO_ALIGN_LEFT, "Aperte espaco para fechar");
 }
 
 if(!apagaprimeiramensagem){
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+50, ALLEGRO_ALIGN_LEFT, "Bem vindo ao Baluistro!, aqui estão as regras:");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+60, ALLEGRO_ALIGN_LEFT, "Jogue maos de poker, você tem direito a jogar elas 4 vezes");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+70, ALLEGRO_ALIGN_LEFT, "com 3 descartes, cada mao possui um valor, sendo eles a");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+80, ALLEGRO_ALIGN_LEFT, "quantidade de pontos base, e o multiplicador");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+90, ALLEGRO_ALIGN_LEFT, "cada carta adicionada na sua mao adiciona seu");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+100, ALLEGRO_ALIGN_LEFT, "valor na pontuacao base.");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+110, ALLEGRO_ALIGN_LEFT, "Por exemplo: Você joga a mão de um par");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+120, ALLEGRO_ALIGN_LEFT, "com as cartas A de copas e um A de espadas");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+130, ALLEGRO_ALIGN_LEFT, "o par possui pontuacao base 10 e mult 2, cada A vale 14");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+140, ALLEGRO_ALIGN_LEFT, "adicionando 28 dos dois As na pontuacao base da 38");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+150, ALLEGRO_ALIGN_LEFT, "multiplicado por 2 da uma pontuacao de 76 ");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+160, ALLEGRO_ALIGN_LEFT, "Aperte M pra começar a apostar");
-    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+170, ALLEGRO_ALIGN_LEFT, "(Dica: aperte M pra abrir e fechar essa aba enquanto joga!)");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+50, ALLEGRO_ALIGN_LEFT, "Bem vindo ao Baluistro!, aqui estao as regras:");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+70, ALLEGRO_ALIGN_LEFT, "Jogue maos de poker, voce tem direito a jogar elas 4 vezes");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+90, ALLEGRO_ALIGN_LEFT, "com 3 descartes, cada mao possui um valor, sendo eles a");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+110, ALLEGRO_ALIGN_LEFT, "quantidade de pontos base, e o multiplicador");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+130, ALLEGRO_ALIGN_LEFT, "cada carta adicionada na sua mao adiciona seu");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+150, ALLEGRO_ALIGN_LEFT, "valor na pontuacao base.");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+170, ALLEGRO_ALIGN_LEFT, "Por exemplo: Voce joga a mao de um par");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+190, ALLEGRO_ALIGN_LEFT, "com as cartas A de copas e um A de espadas");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+210, ALLEGRO_ALIGN_LEFT, "o par possui pontuacao base 10 e mult 2, cada A vale 14");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+230, ALLEGRO_ALIGN_LEFT, "adicionando 28 dos dois As na pontuacao base da 38");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+250, ALLEGRO_ALIGN_LEFT, "multiplicado por 2 da uma pontuacao de 76 ");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+270, ALLEGRO_ALIGN_LEFT, "Aperte M pra comecar a apostar!");
+    al_draw_text(font, al_map_rgb(255, 255, 255), menu_pos_x+50, menu_pos_y+290, ALLEGRO_ALIGN_LEFT, "(Dica: aperte M pra abrir e fechar essa aba enquanto joga!)");
 
 
 

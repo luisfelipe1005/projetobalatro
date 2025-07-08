@@ -23,7 +23,6 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
     #include <time.h>
-    #include <time.h>
 
 void shuffle(char **array, size_t n);
 bool isflush(char **array, size_t n);
@@ -31,7 +30,7 @@ int ismultiple(char **array, size_t n);
 bool issequence(char **array, size_t n);
 int comparador(const void *a, const void *b);
 void numerar_baralho(char **array, size_t n, int* a);
-
+//declaração de todas as funções utilizadas
     const float FPS = 90;
 
     const int SCREEN_W = 1024;
@@ -46,7 +45,7 @@ void numerar_baralho(char **array, size_t n, int* a);
     const int BOTAO_LARGURA = 257;
 
     const int BOTAO_ALTURA = 124;
-
+//declaração de largura e altura de dois objetos no jogo, a fim de utilizar eles para alguns parametros de distancia
 
 
 
@@ -86,6 +85,7 @@ void numerar_baralho(char **array, size_t n, int* a);
 
         ALLEGRO_FONT *font = al_load_ttf_font("./fontebalatro.ttf", 20, 0);
         // Credito para a fonte: https://managore.itch.io/m6x11
+        //declaração de uso de fonte personalizada
     if (!font) {
         fprintf(stderr, "Erro ao criar fonte builtin!\n");
         return -1;
@@ -161,14 +161,18 @@ void numerar_baralho(char **array, size_t n, int* a);
 
 
             al_reserve_samples(1);
+//aqui é feitos as funções pra tocar a musica, sendo primeiro reservado a sample no allegro, tendo apenas um audio
     ALLEGRO_SAMPLE* music = al_load_sample("./audios/OST.ogg");
+    //Aqui é declarado que a musica está no diretorio "./audios/OST.ogg" da pasta
     ALLEGRO_SAMPLE_INSTANCE* music_instance = al_create_sample_instance(music);
+    //
     al_set_sample_instance_playmode(music_instance, ALLEGRO_PLAYMODE_LOOP);
+    
     al_attach_sample_instance_to_mixer(music_instance, al_get_default_mixer());
     al_play_sample_instance(music_instance);
-
+    //aqui a musica começa a ser tocada
     bool music_muted = false;
-
+//aqui é usada uma booleana pra declarar quando a musica pode ser tocada ou não
         ALLEGRO_BITMAP *background = NULL;
 
         ALLEGRO_BITMAP *baralho = NULL;
@@ -872,6 +876,7 @@ char charr[5] = {0,0,0,0,0},ra;
 
 int count[5] = {0,0,0,0,0},ir, nmrd = 0;
 
+//aqui dois arrays são criados, um para chars e outros pra contadores, sendo eles pra representar partes do vetor iguais
 bool encontrado,par=false,dpares=false,trinca=false,fullhouse=false;
 
 
@@ -901,7 +906,8 @@ nmrd++;
 
 }
 
-
+//aqui um for é iniciado percorrendo todo o vetor, que guarda o valor dele no inicio, e em seguida olha todo o vetor novamente pelo valor nmrd, pra quando ele "olhar" o array, não pegar valor antes dele
+//caso seja encontrado um numero que ja tenha sido encontrado anteriormente ele é salvo no charr e no contador, e em seguida ele continua a procura
 int maior=1;
 
 for( k = 0; k < nmrd; k++) {
@@ -991,3 +997,4 @@ int i;
     }
     }
 }
+//Nesta função é usado dois arrays, um de strings, e outro de inteiros, a função analisa o primeiro caracter da string, caso seja um '0', que representa o 10, é dado o valor de 10 pro array numerico, caso sejam letras ele dá um valor que representa o valor delas no jogo no array de numeros, caso sejam algum outro numero no array de char, é dado um -'0' pra demonstrar que não é mais um carater, mas sim um numero.

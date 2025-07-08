@@ -165,9 +165,9 @@ void numerar_baralho(char **array, size_t n, int* a);
     ALLEGRO_SAMPLE* music = al_load_sample("./audios/OST.ogg");
     //Aqui é declarado que a musica está no diretorio "./audios/OST.ogg" da pasta
     ALLEGRO_SAMPLE_INSTANCE* music_instance = al_create_sample_instance(music);
-    //
+    //cria a instancia da musica
     al_set_sample_instance_playmode(music_instance, ALLEGRO_PLAYMODE_LOOP);
-    
+    //aqui é declarado que a musica estará sempre em loop
     al_attach_sample_instance_to_mixer(music_instance, al_get_default_mixer());
     al_play_sample_instance(music_instance);
     //aqui a musica começa a ser tocada
@@ -186,7 +186,7 @@ void numerar_baralho(char **array, size_t n, int* a);
         ALLEGRO_BITMAP *menu = NULL;
 
 
-
+//declaração dos bitmaps usados pelo allegro
 
 
         float baralho_pos_x = SCREEN_W - BARALHO_LARGURA;
@@ -214,7 +214,7 @@ void numerar_baralho(char **array, size_t n, int* a);
                 carta_pos_x[a] = SCREEN_W/2 - BARALHO_LARGURA*1.5+ 100*a ;
            carta_pos_y[a] = SCREEN_H*2  - BARALHO_ALTURA*2 ;
         }
-
+//aqui são todos os valores de posições dos objetos
 
 
         int click=0;
@@ -235,28 +235,25 @@ void numerar_baralho(char **array, size_t n, int* a);
 
         menu=al_load_bitmap("imagens/menu.png");
         //Credito para o sprite do menu: https://managore.itch.io/m6x11
-
+// Aqui é declarado os sprites usados para cada objeto
          char *cartas[] = {
  "AO", "AE", "AC", "AP", "2O", "2E", "2C", "2P","3O", "3E", "3C", "3P","4O", "4E", "4C", "4P","5O", "5E", "5C", "5P","6O", "6E", "6C", "6P","7O", "7E", "7C", "7P","8O", "8E", "8C", "8P","9O", "9E", "9C", "9P","0O", "0E", "0C", "0P","JO", "JE", "JC", "JP","QO", "QE", "QC", "QP","KO", "KE", "KC", "KP"
 };
+//aqui é declarado as cartas utilizadas num vetor de strings, sendo elas representadas com 'numero/letra''letra do naipe da carta', por exemplo 5 de copas é mostrada como "5C"
 int mao_num[5];
+
     int size = sizeof(cartas) / sizeof(cartas[0]);
 
 
     srand(time(NULL));
         shuffle(cartas,size);
-int nmrcartatopo=0;
-char *mao[7];
-char *discarte[52];
-int disc_ind=0;
-char image_path[50];
-bool carta_click[7]={false,false,false,false,false,false,false};
-int cartamaos=0;
-char texto[50],val_mao[20];
-int total=0;
-int cont_selec=0;
-int jogadas=4,descartes=3;
-bool gameover=false, apagaprimeiramensagem=false;
+        //aqui é declarado o tamando do vetor, e em seguida usa a função shuffle para embaralhar o vetor
+int nmrcartatopo=0, disc_ind=0,cartamaos=0, total=0,cont_selec=0,jogadas=4,descartes=3;
+
+char *mao[7], *discarte[52],  image_path[50],texto[50],val_mao[20];
+bool carta_click[7]={false,false,false,false,false,false,false},gameover=false, apagaprimeiramensagem=false;
+ //declaração de todas as variaveis importantes usadas no jogo
+
 
 
 for (a = 0; a < 7; a++) {
